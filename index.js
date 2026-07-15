@@ -10,29 +10,32 @@ const paymentRoutes = require("./src/routes/paymentRoutes");
 const premiumPlanRoutes = require("./src/routes/premiumPlanRoutes");
 const financialReportRoutes = require("./src/routes/financialReportRoutes");
 
+const verifyToken = require("./src/middlewares/authMiddleware");
+
 dotenv.config();
 
 const app = express();
 
 app.use(express.json());
 
-app.use("/api/users", userRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/carts", cartRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/payments", paymentRoutes);
-app.use("/api/premiumplans", premiumPlanRoutes);
-app.use("/api/reports", financialReportRoutes);
-
+// Conexión a MongoDB
 connectDB();
 
-app.use(express.json());
-
+// Ruta pública
 app.get("/", (req, res) => {
     res.json({
         message: "API running successfully"
     });
 });
+
+// Rutas protegidas
+app.use("/api/users", verifyToken, userRoutes);
+app.use("/api/products", verifyToken, productRoutes);
+app.use("/api/carts", verifyToken, cartRoutes);
+app.use("/api/orders", verifyToken, orderRoutes);
+app.use("/api/payments", verifyToken, paymentRoutes);
+app.use("/api/premiumplans", verifyToken, premiumPlanRoutes);
+app.use("/api/reports", verifyToken, financialReportRoutes);
 
 const PORT = process.env.PORT || 5100;
 
