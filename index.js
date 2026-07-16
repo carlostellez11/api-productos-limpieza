@@ -10,8 +10,7 @@ const paymentRoutes = require("./src/routes/paymentRoutes");
 const premiumPlanRoutes = require("./src/routes/premiumPlanRoutes");
 const financialReportRoutes = require("./src/routes/financialReportRoutes");
 
-const verifyToken = require("./src/middlewares/authMiddleware");
-
+const verifyAppToken = require("./src/middlewares/authMiddleware");
 dotenv.config();
 
 const app = express();
@@ -29,13 +28,13 @@ app.get("/", (req, res) => {
 });
 
 // Rutas protegidas
-app.use("/api/users", verifyToken, userRoutes);
-app.use("/api/products", verifyToken, productRoutes);
-app.use("/api/carts", verifyToken, cartRoutes);
-app.use("/api/orders", verifyToken, orderRoutes);
-app.use("/api/payments", verifyToken, paymentRoutes);
-app.use("/api/premiumplans", verifyToken, premiumPlanRoutes);
-app.use("/api/reports", verifyToken, financialReportRoutes);
+app.use("/api/users", verifyAppToken, userRoutes);
+app.use("/api/products", verifyAppToken, productRoutes);
+app.use("/api/carts", verifyAppToken, cartRoutes);
+app.use("/api/orders", verifyAppToken, orderRoutes);
+app.use("/api/payments", verifyAppToken, paymentRoutes);
+app.use("/api/premiumplans", verifyAppToken, premiumPlanRoutes);
+app.use("/api/reports", verifyAppToken, financialReportRoutes);
 
 const PORT = process.env.PORT || 5100;
 

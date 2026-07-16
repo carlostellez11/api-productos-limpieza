@@ -1,28 +1,19 @@
-const jwt = require("jsonwebtoken");
+const verifyAppToken = (req, res, next) => {
+    const appToken = req.headers["app-token"];
 
-const verifyToken = (req, res, next) => {
-    const authHeader = req.headers.authorization;
-
-    // Verifica que exista el encabezado Authorization
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!appToken) {
         return res.status(401).json({
-            message: "Access denied. Token required."
+            message: "Application token is required."
         });
     }
 
-    // Obtiene el token enviado por el cliente
-    const token = authHeader.split(" ")[1];
-
-    try {
-        // Verifica que el token sea válido usando la llave secreta
-        jwt.verify(token, process.env.JWT_SECRET);
-
-        next();
-    } catch (error) {
+    if (appToken !== process.env.APP_TOKEN) {
         return res.status(401).json({
-            message: "Invalid or expired token."
+            message: "Invalid application token."
         });
     }
+
+    next();
 };
 
-module.exports = verifyToken;
+module.exports = verifyAppToken;
