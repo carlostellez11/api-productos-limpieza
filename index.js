@@ -1,4 +1,5 @@
 const express = require("express");
+const helmet = require("helmet");
 const dotenv = require("dotenv");
 const connectDB = require("./src/config/db");
 
@@ -14,7 +15,7 @@ const verifyAppToken = require("./src/middlewares/authMiddleware");
 dotenv.config();
 
 const app = express();
-
+app.use(helmet());
 app.use(express.json());
 
 // Conexión a MongoDB
