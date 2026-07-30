@@ -19,24 +19,21 @@ exports.createProduct = async (req, res) => {
 
 exports.getProducts = async (req, res) => {
     try {
-
-        const products = await Product.find();
+        const products = await Product.find().select(
+            "_id name brand category description price stock isActive"
+        );
 
         res.status(200).json(products);
-
     } catch (error) {
-
-        res.status(500).json({
-            message: "Error fetching products."
-        });
-
+        res.status(500).json({ message: "Error fetching products." });
     }
 };
 
 exports.getProductById = async (req, res) => {
     try {
-
-        const product = await Product.findById(req.params.id);
+        const product = await Product.findById(req.params.id).select(
+            "_id name brand category description price stock isActive"
+        );
 
         if (!product) {
             return res.status(404).json({
@@ -45,13 +42,8 @@ exports.getProductById = async (req, res) => {
         }
 
         res.status(200).json(product);
-
     } catch (error) {
-
-        res.status(500).json({
-            message: "Error fetching product."
-        });
-
+        res.status(500).json({ message: "Error fetching product." });
     }
 };
 
